@@ -23,8 +23,12 @@ function getRepos(username, done) {
             res.on('data', data => body += data);
 
             res.on('end', () => {
-                const result = JSON.parse(body);
-                done(null, result)
+                try {
+                    const result = JSON.parse(body);
+                    done(null, result)
+                } catch (error) {
+                    done(new Error(`couldn't read/parse data (${error.message})`))
+                }
             })
         } else {
             done(new Error(`Couldn't receive data from server (${res.statusCode} ${res.statusMessage})`))
